@@ -1,0 +1,126 @@
+# Importing libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sal_data=pd.read_csv('/Users/KIIT/Downloads/Advertising.csv')
+
+sal_data
+
+sal_data.shape
+
+sal_data.describe()
+
+sal_data.info
+
+sal_data['TV'].value_counts()
+
+sal_data['Newspaper'].value_counts()
+
+sal_data['Radio'].value_counts()
+
+sal_data['Sales'].value_counts()
+
+sal_data.isnull().sum()
+
+# Data visualisation
+
+sns.distplot(sal_data['Newspaper'])
+
+
+sns.boxplot(sal_data['Newspaper'])
+
+sns.boxplot(sal_data['Sales'])
+
+sns.pairplot(sal_data,x_vars=['TV','Newspaper','Radio'],y_vars='Sales',height=4,aspect=1,kind='scatter')
+plt.show()
+
+sns.heatmap(sal_data.corr(),annot=True)
+sns.color_palette("rocket", as_cmap=True)
+plt.show()
+
+X=sal_data['TV']
+y=sal_data['Sales']
+
+X=X.values.reshape(-1,1)
+
+X
+
+y
+
+X.shape
+
+y.shape
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test= train_test_split(X,y,test_size=0.33)
+
+(X_train,y_train)
+
+(X_train.shape,y_train.shape)
+
+# Applying different Machine Learning algorithms
+
+from sklearn.neighbors import KNeighborsRegressor 
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import metrics
+
+knn=KNeighborsRegressor().fit(X_train,y_train)
+
+knn
+
+knn_prediction=knn.predict(X_train)
+
+knn_error_score=metrics.r2_score(y_train,knn_prediction)
+print("Error score: ",knn_error_score)
+
+knn_test_data_prediction=knn.predict(X_test)
+
+knn_test_error=metrics.r2_score(y_test,knn_test_data_prediction)
+print("Error score: ",knn_test_error)
+
+plt.scatter(y_test,knn_test_data_prediction)
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
+plt.show()
+
+dec_tree_reg=DecisionTreeRegressor().fit(X_train,y_train)
+
+dec_tree_reg
+
+dec_tree_prediction=dec_tree_reg.predict(X_train)
+
+dec_tree_error_score=metrics.r2_score(y_train,dec_tree_prediction)
+print("Error score: ",dec_tree_error_score)
+
+dec_tree_test_prediction=dec_tree_reg.predict(X_test)
+
+dec_tree_test_error_score=metrics.r2_score(y_test,dec_tree_test_prediction)
+print("Error score: ",dec_tree_test_error_score)
+
+plt.scatter(y_test,dec_tree_test_prediction)
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
+plt.show()
+
+ran_for_reg=RandomForestRegressor().fit(X_train,y_train)
+
+ran_for_reg
+
+ran_for_reg_prediction=ran_for_reg.predict(X_train)
+
+ran_for_error_score=metrics.r2_score(y_train,ran_for_reg_prediction)
+print("Error score: ",ran_for_error_score)
+
+ran_for_test_prediction=ran_for_reg.predict(X_test)
+
+ran_for_test_error_score=metrics.r2_score(y_test,ran_for_test_prediction)
+print("Error score: ",ran_for_test_error_score)
+
+plt.scatter(y_test,ran_for_test_prediction)
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
+plt.show()
+
